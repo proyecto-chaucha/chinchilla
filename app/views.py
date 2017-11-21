@@ -3,4 +3,6 @@ from app import app, rpc
 
 @app.route('/')
 def home():
-	return str(rpc.getinfo()['blocks'])
+	info = rpc.getinfo()
+
+	return render_template('home.html', info=info)
