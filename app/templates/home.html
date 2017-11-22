@@ -1,37 +1,27 @@
 {% extends "base.html" %}
-
 {% block body %}
 
-<section class="section">
-	<div class="container">
-		<h1 class="title">Explorador de bloques</h1>
-		<h2 class="subtitle heading">Proyecto Chaucha - 2017</h2>
-		<br>
-		<table class="table center is-hoverable is-narrow">
-			<thead>
-				<tr>
-					<th class="has-text-centered"><abbr title="Número de Bloque">#</abbr></th>
-					<th class="has-text-centered">Edad</th>
-					<th class="has-text-centered">Hash</th>
-					<th class="has-text-centered"><abbr title="Transacciones">Tx</abb></th>
-					<th class="has-text-centered">Tamaño</th>
-				</tr>
-			</thead>
-			<tbody class="monospace">
-			{% for i in blocks %}
-				<tr>
-					<td class="has-text-centered">{{ i['height'] }}</td>
-					<td class="has-text-centered">{{ ((i['now'] - i['time'])/60)|round(2) }} Min.</td>
-					<td class="has-text-centered">{{ i['hash'] }}</td>
-					<td class="has-text-centered">{{ i['tx']|length }}</td>
-					<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
-</section>
-
-
+<table class="table center is-hoverable is-narrow">
+	<thead>
+		<tr>
+			<th class="has-text-centered"><abbr title="Número de Bloque">#</abbr></th>
+			<th class="has-text-centered">Edad</th>
+			<th class="has-text-centered">Hash</th>
+			<th class="has-text-centered"><abbr title="Transacciones">Tx</abbr></th>
+			<th class="has-text-centered">Tamaño</th>
+		</tr>
+	</thead>
+	<tbody class="monospace">
+	{% for i in blocks %}
+		<tr>
+			<td class="has-text-centered"><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
+			<td class="has-text-centered">{{ ((i['now'] - i['time'])/60)|round(2) }} Min.</td>
+			<td class="has-text-centered">{{ i['hash'] }}</td>
+			<td class="has-text-centered">{{ i['tx']|length }}</td>
+			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
 
 {% endblock %}

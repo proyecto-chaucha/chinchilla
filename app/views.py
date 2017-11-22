@@ -14,3 +14,20 @@ def home():
 		blockArray.append(block)
 
 	return render_template('home.html', blocks=blockArray[::-1])
+
+@app.route('/block/<string:hash>')
+def block(hash):
+	blockInfo = rpc.getblock(hash)
+	height = blockInfo['height']
+
+	txArray = []
+	for i in blockInfo['tx']:
+		rawTx = rpc.getrawtransaction(i)
+		tx = rpc.decoderawtransaction(rawTx)
+
+		txDict = {'hash' : tx['txid'], 'inputs' : len(tx['vin']), 'outputs' : len(tx['vout']) }
+		txArray.append(txDict)
+
+	print (txArray)
+
+	return render_template('block.html', tx=txArray, height=height)

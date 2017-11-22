@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="has-text-centered">
+<h3 class="title is-size-4">Bloque #{{ height }}</h3>
+<p class="subtitle heading"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
+</div>
+<br>
+<table class="table center is-hoverable is-narrow">
+	<thead>
+		<tr>
+			<th class="has-text-centered">Hash</th>
+			<th class="has-text-centered">Entradas</th>
+			<th class="has-text-centered">Salidas</th>
+		</tr>
+	</thead>
+	<tbody class="monospace">
+	{% for i in tx %}
+		<tr>
+			<td class="has-text-centered"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'] }}</a></td>
+			<td class="has-text-centered">{{ i['inputs'] }}</td>
+			<td class="has-text-centered">{{ i['outputs'] }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
