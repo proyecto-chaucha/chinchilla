@@ -1,5 +1,5 @@
 from os import environ
-from app import app
+from chinchilla import app
 
 if __name__ == '__main__':
 	HOST = environ.get('SERVER_HOST', 'localhost')

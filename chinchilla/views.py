@@ -1,5 +1,5 @@
 from flask import render_template, jsonify, redirect, url_for, request
-from app import app, rpc
+from chinchilla import app, rpc
 from time import strftime, localtime
 
 @app.route('/')
