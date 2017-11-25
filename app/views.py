@@ -4,18 +4,32 @@ from time import strftime, localtime
 
 @app.route('/')
 def home():
-	info = rpc.gettxoutsetinfo()
+	if request.args.get('page'):
+		page = int(request.args.get('page')) - 1
+	else:
+		page = 0
 
+	info = rpc.gettxoutsetinfo()
 	blockCount = rpc.getblockcount()
 	blockArray = []
 
-	for i in range(blockCount - 20, blockCount + 1):
-		blockHash = rpc.getblockhash(i)
-		block = rpc.getblock(blockHash)
-		block['time'] = strftime("%d %b %Y %H:%M:%S", localtime(block['time']))
-		blockArray.append(block)
+	maxPage = int((blockCount - 19)/20)
+	delta = blockCount - page*20
 
-	return render_template('home.html', blocks=blockArray[::-1], info=info)
+	pages = {'current' : page, 'max' : maxPage}
+
+	for i in range(delta - 19, delta + 1):
+		if i > 0:
+			blockHash = rpc.getblockhash(i)
+			block = rpc.getblock(blockHash)
+			block['time'] = strftime("%d %b %Y %H:%M:%S", localtime(block['time']))
+			blockArray.append(block)
+
+	if len(blockArray) > 0:
+		return render_template('home.html', blocks=blockArray[::-1], info=info, pages=pages)
+	else:
+		return render_template('error.html', info=info)
+		
 
 @app.route('/block/<string:hash>')
 def block(hash):

@@ -3,6 +3,19 @@
 
 <div class="has-text-centered">
 <h3 class="title is-size-4">Últimos bloques generados</h3>
+<p class="subtitle monospace mini">
+	{% if pages['current'] > 0 %}
+		<a href="{{ url_for('home',page=pages['current']) }}" class="has-text-danger">&lt;&lt;</a>
+	{% endif %}
+
+	Pagina #{{ pages['current'] + 1 }}
+
+	{% if pages['current'] - 1 < pages['max'] %}
+		<a href="{{ url_for('home',page=pages['current'] + 2) }}" class="has-text-danger">&gt;&gt;</a>
+	{% endif %}
+	
+
+</p>
 </div>
 <br>
 
