@@ -1,8 +1,8 @@
 from flask import Flask
 from bitcoinrpc.authproxy import AuthServiceProxy
 
-RPCuser = ''
-RPCpassword = ''
+RPCuser = 'chaucha'
+RPCpassword = 'probando'
 RPCport = 21662
 
 app = Flask(__name__)

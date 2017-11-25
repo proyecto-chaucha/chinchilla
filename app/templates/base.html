@@ -12,24 +12,44 @@
 	<meta name="keywords" content="chaucha, cryptocurrency, chauchera">
 	<meta name="author" content="César Vásquez C.">	
 	<style type="text/css">
-	@import url('https://fonts.googleapis.com/css?family=Comfortaa|Anonymous+Pro');
+	@import url('https://fonts.googleapis.com/css?family=Comfortaa|Source+Code+Pro');
 
 	body { font-family: 'Comfortaa', cursive; font-size: 0.95em; }
-	.monospace { font-family: 'Anonymous Pro', monospace; }
+	.monospace { font-family: 'Source Code Pro', monospace; font-size: 0.9em; }
+	.mini { text-transform: uppercase; letter-spacing: 1px; }
+	p.small { line-height: 110%; }
 	table.center { margin-left:auto; margin-right:auto; }
-	a {text-decoration: underline;}
+	a { text-decoration: underline; }
+	h3 {font-family: 'Source Code Pro', monospace; font-size: 1.15em; }
 	</style>
 </head>
 <body>
 <section class="section">
 	<div class="container">
-		<h1 class="title">Explorador de bloques</h1>
-		<h2 class="subtitle heading">Proyecto Chaucha - 2017</h2>
+		<div class="level">
+			<div class="level-left">
+				<div>
+					<h1 class="title">Explorador de bloques</h1>
+					<h2 class="subtitle monospace mini">Proyecto Chaucha - 2017</h2>
+				</div>
+			</div>
+			<div class="level-right">
+				<div>
+					<p class="monospace has-text-right small">
+						En la Red Chaucha<br>
+						existen <u>{{ info['height'] }}</u> bloques,<br>
+						<u>{{info['transactions'] }}</u> transacciones y<br>
+						<u>{{ info['total_amount'] | int }}</u> Chauchas.<br>
+					</p>
+				</div>
+			</div>
+		</div>
 		<br>
 {% block body %}
 
 {% endblock %}
 	</div>
 </section>
+
 </body>
 </html>

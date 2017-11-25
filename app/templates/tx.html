@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="has-text-centered">
+<h3 class="title is-size-4">{{ txid }}</h3>
+<p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
+</div>
+<br>
+<div class="columns">
+	<div class="column has-text-centered">
+		<h1 class="title is-size-4">Entradas</h1>
+		<table class="table is-fullwidth">
+			<thead>
+				<tr>
+					<th class="has-text-centered">Dirección</th>
+					<th class="has-text-centered">Monto</th>
+				</tr>
+			</thead>
+			<tbody class="monospace">
+			{% for i in vin %}
+				<tr>
+					<td class="has-text-centered">
+						{% for j in i['addresses'] %}
+						{{ j }}<br>
+						{% endfor %}
+					</td>
+					<td class="has-text-centered">{{ i['value'] }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="column has-text-centered">
+		<h1 class="title is-size-4">Salidas</h1>
+		<table class="table is-fullwidth">
+			<thead>
+				<tr>
+					<th class="has-text-centered">Dirección</th>
+					<th class="has-text-centered">Monto</th>
+				</tr>
+			</thead>
+			<tbody class="monospace">
+			{% for i in vout %}
+				<tr>
+					<td class="has-text-centered">
+						{% for j in i['addresses'] %}
+						{{ j }}<br>
+						{% endfor %}
+					</td>
+					<td class="has-text-centered">{{ i['value'] }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}
