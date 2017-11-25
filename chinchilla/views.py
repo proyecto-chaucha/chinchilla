@@ -53,8 +53,6 @@ def block(hash):
 					'amount' : float(amount) }
 			txArray.append(txDict)
 
-		print (txArray)
-
 		return render_template('block.html', tx=txArray, height=height, info=info)
 	except:
 		return render_template('error.html', info=info)
