@@ -80,8 +80,6 @@ def tx(txid):
 				tx = rpc.decoderawtransaction(rawTx)
 				n = i['vout']
 
-				print(tx['vout'])
-
 				vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : tx['vout'][n]['scriptPubKey']['addresses']})
 
 		return render_template('tx.html', vout=vout, vin=vin, info=info, txid=txid)
