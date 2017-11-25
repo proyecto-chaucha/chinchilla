@@ -8,7 +8,7 @@
 		<a href="{{ url_for('home',page=pages['current']) }}" class="has-text-danger"><i class="fa fa-lg fa-caret-left" aria-hidden="true"></i></a>
 	{% endif %}
 
-	Pagina #{{ pages['current'] + 1 }}
+	Página {{ pages['current'] + 1 }} de {{ pages['max'] + 2 }}
 
 	{% if pages['current'] - 1 < pages['max'] %}
 		<a href="{{ url_for('home',page=pages['current'] + 2) }}" class="has-text-danger">
