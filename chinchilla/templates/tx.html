@@ -2,7 +2,8 @@
 {% block body %}
 
 <div class="has-text-centered">
-<h3 class="title is-size-4">{{ txid }}</h3>
+<h3 class="title is-size-4 is-hidden-touch">{{ txid }}</h3>
+<h3 class="title is-size-4 is-hidden-desktop">{{ txid[:25] }}...</h3>
 <p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
 </div>
 <br>

@@ -21,7 +21,28 @@
 </div>
 <br>
 
-<table class="table center">
+<table class="table center is-hidden-desktop">
+	<thead>
+		<tr>
+			<th class="has-text-centered">#</th>
+			<th class="has-text-centered">Fecha</th>
+			<th class="has-text-centered">Tamaño</th>
+			<th class="has-text-centered">Tx</th>
+		</tr>
+	</thead>
+	<tbody class="monospace">
+	{% for i in blocks %}
+		<tr>
+			<td class="has-text-centered"><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
+			<td class="has-text-centered">{{ i['time'] }}</td>
+			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
+			<td class="has-text-centered">{{ i['tx']|length }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+<table class="table center is-hidden-touch">
 	<thead>
 		<tr>
 			<th class="has-text-centered">#</th>
