@@ -3,7 +3,7 @@ Explorador de bloques oficial del Proyecto Chaucha
 
 ## Instalación
 
-Este sistema fue programado para funcionar en Python ver. 3.6 junto con las extensiones [Flask](http://flask.pocoo.org) y [python-bitcoinrpc](https://github.com/jgarzik/python-bitcoinrpc).
+Este sistema fue programado para funcionar en Python 3.6 junto con las extensiones [Flask](http://flask.pocoo.org) y [python-bitcoinrpc](https://github.com/jgarzik/python-bitcoinrpc).
 
 ```
 sudo apt-get install pip3
