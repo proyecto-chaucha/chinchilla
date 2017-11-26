@@ -1,6 +1,10 @@
 # Chinchilla
 Explorador de bloques oficial del Proyecto Chaucha
 
+## Ejemplo
+
+Puedes visitar [explorer.chaucha.cl](http://explorer.chaucha.cl) para ver en funcionamiento el sistema sobre la [Red Chaucha](https://www.chaucha.cl/).
+
 ## Instalación
 
 Este sistema fue programado para funcionar en Python 3.6 junto con las extensiones [Flask](http://flask.pocoo.org) y [python-bitcoinrpc](https://github.com/jgarzik/python-bitcoinrpc).
