@@ -14,7 +14,9 @@ Luego de esto, es necesario ejecutar la wallet en modo **-server -daemon -txinde
 
 Para finalizar, se ejecuta el código con python de la siguiente manera.
 
-`python3 __main__.py`
+```
+python3 __main__.py
+```
 
 Si se quiere ejecutar en un vps es necesario utilizar [Gunicorn](http://gunicorn.org) para redirigir el flujo web a la ip del servidor. Para mantener en funcionamiento el sistema es recomendable usar *nohup*.
 
