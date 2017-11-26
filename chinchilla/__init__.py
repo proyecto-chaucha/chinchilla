@@ -1,9 +1,6 @@
 from flask import Flask
 from bitcoinrpc.authproxy import AuthServiceProxy
-
-RPCuser = 'chaucha'
-RPCpassword = 'probando'
-RPCport = 21662
+from chinchilla.config import RPCuser, RPCpassword, RPCport
 
 app = Flask(__name__)
 
