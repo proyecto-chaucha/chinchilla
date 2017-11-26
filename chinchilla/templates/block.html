@@ -17,7 +17,7 @@
 	<tbody class="monospace">
 	{% for i in tx %}
 		<tr>
-			<td class="has-text-centered"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'][:25] }}...</a></td>
+			<td class="has-text-centered"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'][:20] }}...</a></td>
 			<td class="has-text-centered">{{ i['amount'] }} CHA</td>
 		</tr>
 	{% endfor %}

@@ -3,7 +3,7 @@
 
 <div class="has-text-centered">
 <h3 class="title is-size-4 is-hidden-touch">{{ txid }}</h3>
-<h3 class="title is-size-4 is-hidden-desktop">{{ txid[:25] }}...</h3>
+<h3 class="title is-size-4 is-hidden-desktop">{{ txid[:15] }}...</h3>
 <p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
 </div>
 <br>
@@ -20,9 +20,15 @@
 			<tbody class="monospace">
 			{% for i in vin %}
 				<tr>
-					<td class="has-text-centered">
+					<td class="has-text-centered is-hidden-touch">
 						{% for j in i['addresses'] %}
 						{{ j }}<br>
+						{% endfor %}
+					</td>
+					<td class="has-text-centered is-hidden-desktop">
+						{% for j in i['addresses'] %}
+						{{ j[:17] }}<br>
+						{{ j[17:] }}<br>
 						{% endfor %}
 					</td>
 					<td class="has-text-centered">{{ i['value'] }}</td>
@@ -44,9 +50,15 @@
 			<tbody class="monospace">
 			{% for i in vout %}
 				<tr>
-					<td class="has-text-centered">
+					<td class="has-text-centered is-hidden-touch">
 						{% for j in i['addresses'] %}
 						{{ j }}<br>
+						{% endfor %}
+					</td>
+					<td class="has-text-centered is-hidden-desktop">
+						{% for j in i['addresses'] %}
+						{{ j[:17] }}<br>
+						{{ j[17:] }}<br>
 						{% endfor %}
 					</td>
 					<td class="has-text-centered">{{ i['value'] }}</td>
