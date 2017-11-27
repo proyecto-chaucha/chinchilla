@@ -71,8 +71,8 @@ def tx(txid):
 		for j in tx['vout']:
 			vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : j['scriptPubKey']['addresses']})
 
-		if len(tx['vin']) == 1 and tx['vin'][0]['sequence'] == 0:
-			vin.append({'value' : '{0:.8f}'.format(10.0), 'addresses' : ['GENERACIÓN']})
+		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
+			vin.append({'value' : 'GENERACIÓN', 'addresses' : ['GENERACIÓN']})
 
 		else:
 			for i in tx['vin']:
