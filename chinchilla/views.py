@@ -2,6 +2,12 @@ from flask import render_template, jsonify, redirect, url_for, request
 from chinchilla import app, rpc
 from time import strftime, localtime
 
+@app.route('/api/info')
+def jsonSupply():
+	info = rpc.gettxoutsetinfo()
+	info['total_amount'] = int(info['total_amount'])
+	return jsonify(info)
+
 @app.route('/')
 def home():
 	if request.args.get('page'):
@@ -80,7 +86,10 @@ def tx(txid):
 				tx = rpc.decoderawtransaction(rawTx)
 				n = i['vout']
 
-				vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : tx['vout'][n]['scriptPubKey']['addresses']})
+				vin.append({
+					'value' : '{0:.8f}'.format(tx['vout'][n]['value']),
+					'addresses' : tx['vout'][n]['scriptPubKey']['addresses']
+					})
 
 		return render_template('tx.html', vout=vout, vin=vin, info=info, txid=txid)
 	except:
