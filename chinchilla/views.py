@@ -2,9 +2,13 @@ from flask import render_template, jsonify, redirect, url_for, request
 from chinchilla import app, rpc
 from time import strftime, localtime
 
+def getsetinfo():
+	info = rpc.gettxoutsetinfo()
+	return info
+
 @app.route('/api/info')
 def jsonSupply():
-	info = rpc.gettxoutsetinfo()
+	info = getsetinfo()
 	info['total_amount'] = int(info['total_amount'])
 	return jsonify(info)
 
@@ -15,7 +19,7 @@ def home():
 	else:
 		page = 0
 
-	info = rpc.gettxoutsetinfo()
+	info = getsetinfo()
 	blockCount = rpc.getblockcount()
 	blockArray = []
 
@@ -39,7 +43,7 @@ def home():
 
 @app.route('/block/<string:hash>')
 def block(hash):
-	info = rpc.gettxoutsetinfo()
+	info = getsetinfo()
 
 	try:
 		blockInfo = rpc.getblock(hash)
