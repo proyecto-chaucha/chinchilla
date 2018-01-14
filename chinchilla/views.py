@@ -6,13 +6,13 @@ def getsetinfo():
 	info = rpc.gettxoutsetinfo()
 	return info
 
-'''
+
 @app.route('/api/info')
 def jsonSupply():
 	info = getsetinfo()
 	info['total_amount'] = int(info['total_amount'])
 	return jsonify(info)
-'''
+
 
 @app.route('/')
 def home():
