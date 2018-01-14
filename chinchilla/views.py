@@ -6,11 +6,13 @@ def getsetinfo():
 	info = rpc.gettxoutsetinfo()
 	return info
 
+'''
 @app.route('/api/info')
 def jsonSupply():
 	info = getsetinfo()
 	info['total_amount'] = int(info['total_amount'])
 	return jsonify(info)
+'''
 
 @app.route('/')
 def home():
@@ -19,7 +21,7 @@ def home():
 	else:
 		page = 0
 
-	info = getsetinfo()
+	#info = getsetinfo()
 	blockCount = rpc.getblockcount()
 	blockArray = []
 
@@ -36,14 +38,14 @@ def home():
 			blockArray.append(block)
 
 	if len(blockArray) > 0:
-		return render_template('home.html', blocks=blockArray[::-1], info=info, pages=pages)
+		return render_template('home.html', blocks=blockArray[::-1], pages=pages)
 	else:
-		return render_template('error.html', info=info)
+		return render_template('error.html')
 		
 
 @app.route('/block/<string:hash>')
 def block(hash):
-	info = getsetinfo()
+	#info = getsetinfo()
 
 	try:
 		blockInfo = rpc.getblock(hash)
@@ -63,13 +65,13 @@ def block(hash):
 					'amount' : float(amount) }
 			txArray.append(txDict)
 
-		return render_template('block.html', tx=txArray, height=height, info=info)
+		return render_template('block.html', tx=txArray, height=height)
 	except:
-		return render_template('error.html', info=info)
+		return render_template('error.html')
 
 @app.route('/tx/<string:txid>')
 def tx(txid):
-	info = rpc.gettxoutsetinfo()
+	#info = getsetinfo()
 
 	try:
 		rawTx = rpc.getrawtransaction(txid)
@@ -95,6 +97,6 @@ def tx(txid):
 					'addresses' : tx['vout'][n]['scriptPubKey']['addresses']
 					})
 
-		return render_template('tx.html', vout=vout, vin=vin, info=info, txid=txid)
+		return render_template('tx.html', vout=vout, vin=vin, txid=txid)
 	except:
-		return render_template('error.html', info=info)
+		return render_template('error.html')
