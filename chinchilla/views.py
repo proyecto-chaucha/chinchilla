@@ -78,10 +78,12 @@ def tx(txid):
 		vin = []
 		vout = []
 		for j in tx['vout']:
-			if 'addresses' in j['scriptPubKey']:
-				addresses = j['scriptPubKey']['addresses']
 
+		try:
+			addresses = j['scriptPubKey']['addresses']
 			vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : addresses})
+		except:
+			print('unparsed txin')
 
 		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
 			vin.append({'value' : 'GENERACIÓN', 'addresses' : ['GENERACIÓN']})
@@ -92,10 +94,11 @@ def tx(txid):
 				tx = rpc.decoderawtransaction(rawTx)
 				n = i['vout']
 
-				if 'addresses' in tx['vout'][n]['scriptPubKey']:
+				try:
 					addresses = tx['vout'][n]['scriptPubKey']['addresses']
-
-				vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : addresses})
+					vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : addresses})
+				except:
+					print('unparsed txout')
 
 		return render_template('tx.html', vout=vout, vin=vin, info=info, txid=txid)
 	except:
