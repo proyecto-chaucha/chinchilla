@@ -78,7 +78,7 @@ def tx(txid):
 		vin = []
 		vout = []
 		for j in tx['vout']:
-			try:
+			if 'addresses' in j['scriptPubKey']:
 				addresses = j['scriptPubKey']['addresses']
 
 			vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : addresses})
@@ -92,7 +92,7 @@ def tx(txid):
 				tx = rpc.decoderawtransaction(rawTx)
 				n = i['vout']
 
-				try:
+				if 'addresses' in tx['vout'][n]['scriptPubKey']:
 					addresses = tx['vout'][n]['scriptPubKey']['addresses']
 
 				vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : addresses})
