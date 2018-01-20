@@ -78,12 +78,11 @@ def tx(txid):
 		vin = []
 		vout = []
 		for j in tx['vout']:
-
-		try:
-			addresses = j['scriptPubKey']['addresses']
-			vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : addresses})
-		except:
-			print('unparsed txin')
+			try:
+				addresses = j['scriptPubKey']['addresses']
+				vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : addresses})
+			except:
+				print('unparsed txin')
 
 		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
 			vin.append({'value' : 'GENERACIÓN', 'addresses' : ['GENERACIÓN']})
