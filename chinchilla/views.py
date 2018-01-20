@@ -80,8 +80,6 @@ def tx(txid):
 		for j in tx['vout']:
 			try:
 				addresses = j['scriptPubKey']['addresses']
-			except:
-				addresses = ['???']
 
 			vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : addresses})
 
@@ -96,8 +94,6 @@ def tx(txid):
 
 				try:
 					addresses = tx['vout'][n]['scriptPubKey']['addresses']
-				except:
-					addresses = ['???']
 
 				vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : addresses})
 
