@@ -7,4 +7,4 @@ if __name__ == '__main__':
 		PORT = int(environ.get('SERVER_PORT', '80'))
 	except ValueError:
 		PORT = 80
-	app.run(HOST, PORT, True)
+	app.run(HOST, PORT, True, threaded=True)
