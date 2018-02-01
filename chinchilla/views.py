@@ -1,8 +1,11 @@
 from flask import render_template, jsonify, redirect, url_for, request
-from chinchilla import app, rpc
+from chinchilla.config import RPCuser, RPCpassword, RPCport
+from bitcoinrpc.authproxy import AuthServiceProxy
 from time import strftime, localtime
+from chinchilla import app, rpc
 
 def getsetinfo():
+	rpc = AuthServiceProxy("http://%s:%s@127.0.0.1:%i"%(RPCuser, RPCpassword, RPCport))
 	info = rpc.gettxoutsetinfo()
 	return info
 
@@ -77,12 +80,11 @@ def tx(txid):
 
 		vin = []
 		vout = []
+
 		for j in tx['vout']:
-			try:
+			if j['scriptPubKey']['type'] == 'pubkeyhash':
 				addresses = j['scriptPubKey']['addresses']
 				vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : addresses})
-			except:
-				print('unparsed txin')
 
 		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
 			vin.append({'value' : 'GENERACIÓN', 'addresses' : ['GENERACIÓN']})
@@ -93,11 +95,8 @@ def tx(txid):
 				tx = rpc.decoderawtransaction(rawTx)
 				n = i['vout']
 
-				try:
-					addresses = tx['vout'][n]['scriptPubKey']['addresses']
-					vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : addresses})
-				except:
-					print('unparsed txout')
+				addresses = tx['vout'][n]['scriptPubKey']['addresses']
+				vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : addresses})
 
 		return render_template('tx.html', vout=vout, vin=vin, info=info, txid=txid)
 	except:
