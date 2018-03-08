@@ -1,19 +1,6 @@
 from flask import render_template, jsonify, redirect, url_for, request
-from chinchilla.config import RPCuser, RPCpassword, RPCport
-from bitcoinrpc.authproxy import AuthServiceProxy
 from time import strftime, localtime
-from chinchilla import app, rpc
-
-def getsetinfo():
-	rpc = AuthServiceProxy("http://%s:%s@127.0.0.1:%i"%(RPCuser, RPCpassword, RPCport))
-	info = rpc.gettxoutsetinfo()
-	return info
-
-@app.route('/api/info')
-def jsonSupply():
-	info = getsetinfo()
-	info['total_amount'] = int(info['total_amount'])
-	return jsonify(info)
+from chinchilla import app, blocksDB, txDB
 
 @app.route('/')
 def home():
@@ -22,8 +9,7 @@ def home():
 	else:
 		page = 0
 
-	info = getsetinfo()
-	blockCount = rpc.getblockcount()
+	blockCount = blocksDB.count()
 	blockArray = []
 
 	maxPage = int((blockCount - 19)/20)
@@ -31,73 +17,72 @@ def home():
 
 	pages = {'current' : page, 'max' : maxPage}
 
-	for i in range(delta - 19, delta + 1):
+	for i in range(delta - 19, delta):
 		if i > 0:
-			blockHash = rpc.getblockhash(i)
-			block = rpc.getblock(blockHash)
+			block = blocksDB.find_one({ 'height' : i })
 			block['time'] = strftime("%d %b %Y %H:%M:%S", localtime(block['time']))
 			blockArray.append(block)
 
 	if len(blockArray) > 0:
-		return render_template('home.html', blocks=blockArray[::-1], info=info, pages=pages)
+		return render_template('home.html', blocks=blockArray[::-1], pages=pages)
 	else:
-		return render_template('error.html', info=info)
+		return render_template('error.html')
 		
-
 @app.route('/block/<string:hash>')
 def block(hash):
-	info = getsetinfo()
+	blockInfo = blocksDB.find_one({ 'hash' : hash })
+	height = blockInfo['height']
 
-	try:
-		blockInfo = rpc.getblock(hash)
-		height = blockInfo['height']
+	txArray = []
 
-		txArray = []
-		for i in blockInfo['tx']:
-			rawTx = rpc.getrawtransaction(i)
-			tx = rpc.decoderawtransaction(rawTx)
-			amount = 0
-			for j in tx['vout']:
-				amount += j['value']
+	for i in blockInfo['tx']:
+		tx = txDB.find_one({ 'hash' : i })
+		print(tx)
 
-			txDict = {'hash' : tx['txid'],
-					'inputs' : len(tx['vin']),
-					'outputs' : len(tx['vout']), 
-					'amount' : float(amount) }
-			txArray.append(txDict)
+		amount = 0
+		for j in tx['vout']:
+			amount += float(j['value'])
 
-		return render_template('block.html', tx=txArray, height=height, info=info)
-	except:
-		return render_template('error.html', info=info)
+		txDict = {'hash' : tx['txid'],
+				'inputs' : len(tx['vin']),
+				'outputs' : len(tx['vout']), 
+				'amount' : '{0:.8f}'.format(amount),
+				'size' : tx['size']}
+		
+		txArray.append(txDict)
+
+	return render_template('block.html', tx=txArray, height=height)
+
 
 @app.route('/tx/<string:txid>')
 def tx(txid):
-	info = getsetinfo()
+	tx = txDB.find_one({ 'txid' : txid})
 
-	try:
-		rawTx = rpc.getrawtransaction(txid)
-		tx = rpc.decoderawtransaction(rawTx)
+	vin = []
+	vout = []
 
-		vin = []
-		vout = []
+	inputvalue = 0.0
+	outputvalue = 0.0
 
-		for j in tx['vout']:
-			if j['scriptPubKey']['type'] == 'pubkeyhash':
-				addresses = j['scriptPubKey']['addresses']
-				vout.append({'value' : '{0:.8f}'.format(j['value']), 'addresses' : addresses})
+	for j in tx['vout']:
+		if j['scriptPubKey']['type'] == 'pubkeyhash':
+			addresses = j['scriptPubKey']['addresses']
+			value = float(j['value'])
+			outputvalue += value
+			vout.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
 
-		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
-			vin.append({'value' : 'GENERACIÓN', 'addresses' : ['GENERACIÓN']})
+	if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
+		vin.append({'value' : 'Generación de Chauchas', 'addresses' : ['Generación de Chauchas']})
 
-		else:
-			for i in tx['vin']:
-				rawTx = rpc.getrawtransaction(i['txid'])
-				tx = rpc.decoderawtransaction(rawTx)
-				n = i['vout']
+	else:
+		for i in tx['vin']:
+			tx = txDB.find_one({ 'txid' : i['txid'] })
+			n = i['vout']
 
-				addresses = tx['vout'][n]['scriptPubKey']['addresses']
-				vin.append({'value' : '{0:.8f}'.format(tx['vout'][n]['value']), 'addresses' : addresses})
+			addresses = tx['vout'][n]['scriptPubKey']['addresses']
+			value = float(tx['vout'][n]['value'])
+			inputvalue += value
+			vin.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
 
-		return render_template('tx.html', vout=vout, vin=vin, info=info, txid=txid)
-	except:
-		return render_template('error.html', info=info)
+	return render_template('tx.html', vout=vout, vin=vin, txid=txid, fee=inputvalue - outputvalue)
+	

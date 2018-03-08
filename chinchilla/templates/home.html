@@ -19,8 +19,7 @@
 
 </p>
 </div>
-<br>
-
+<br><br>
 <table class="table center is-hidden-desktop">
 	<thead>
 		<tr>
@@ -58,7 +57,7 @@
 		<tr>
 			<td class="has-text-centered"><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
 			<td class="has-text-centered">{{ i['time'] }}</td>
-			<td class="has-text-centered">{{ i['difficulty'] }}</td>
+			<td class="has-text-centered">{{ i['difficulty']|round(8) }}</td>
 			<td class="has-text-centered">{{ i['hash'] }}</td>
 			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
 			<td class="has-text-centered">{{ i['tx']|length }}</td>
