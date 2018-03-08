@@ -15,9 +15,11 @@ def home():
 	maxPage = int((blockCount - 19)/20)
 	delta = blockCount - page*20
 
+	print(delta)
+
 	pages = {'current' : page, 'max' : maxPage}
 
-	for i in range(delta - 19, delta):
+	for i in range(delta - 19, delta + 1):
 		if i > 0:
 			block = blocksDB.find_one({ 'height' : i })
 			block['time'] = strftime("%d %b %Y %H:%M:%S", localtime(block['time']))
