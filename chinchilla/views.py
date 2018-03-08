@@ -37,7 +37,6 @@ def block(hash):
 
 	for i in blockInfo['tx']:
 		tx = txDB.find_one({ 'hash' : i })
-		print(tx)
 
 		amount = 0
 		for j in tx['vout']:
