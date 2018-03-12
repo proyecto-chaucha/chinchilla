@@ -28,8 +28,8 @@ def home():
 
 		return render_template('home.html', blocks=blockArray[::-1], pages=pages)
 		
-		except:
-			return render_template('error.html')
+	except:
+		return render_template('error.html')
 		
 @app.route('/block/<string:hash>')
 def block(hash):
