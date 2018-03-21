@@ -6,40 +6,23 @@
 <p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
 </div>
 <br><br>
-<table class="table center is-hidden-desktop">
+<table class="table center">
 	<thead>
 		<tr>
+			<th class="has-text-centered is-hidden-touch">Tamaño</th>
 			<th class="has-text-centered">Hash</th>
+			<th class="has-text-centered is-hidden-touch">Entradas</th>
+			<th class="has-text-centered is-hidden-touch">Salidas</th>
 			<th class="has-text-centered">Monto</th>
 		</tr>
 	</thead>
 	<tbody class="monospace">
 	{% for i in tx %}
 		<tr>
-			<td class="has-text-centered"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'][:20] }}...</a></td>
-			<td class="has-text-centered">{{ i['amount'] }} CHA</td>
-		</tr>
-	{% endfor %}
-	</tbody>
-</table>
-
-<table class="table center is-hidden-touch">
-	<thead>
-		<tr>
-			<th class="has-text-centered">Tamaño</th>
-			<th class="has-text-centered">Hash</th>
-			<th class="has-text-centered">Entradas</th>
-			<th class="has-text-centered">Salidas</th>
-			<th class="has-text-centered">Monto</th>
-		</tr>
-	</thead>
-	<tbody class="monospace">
-	{% for i in tx %}
-		<tr>
-			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
+			<td class="has-text-centered is-hidden-touch">{{ (i['size']/1024)|round(2) }} Kb</td>
 			<td class="has-text-centered"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'] }}</a></td>
-			<td class="has-text-centered">{{ i['inputs'] }}</td>
-			<td class="has-text-centered">{{ i['outputs'] }}</td>
+			<td class="has-text-centered is-hidden-touch">{{ i['inputs'] }}</td>
+			<td class="has-text-centered is-hidden-touch">{{ i['outputs'] }}</td>
 			<td class="has-text-centered">{{ i['amount'] }} CHA</td>
 		</tr>
 	{% endfor %}

@@ -1,5 +1,5 @@
 from flask import render_template, jsonify, redirect, url_for, request
-from time import strftime, localtime
+from time import time
 from chinchilla import app, blocksDB, txDB
 from pymongo import DESCENDING
 
@@ -12,8 +12,7 @@ def home():
 			page = 0
 
 		blockCount = blocksDB.count()
-		blockArray = []
-
+		
 		maxPage = int((blockCount - 19)/20)
 		delta = blockCount - page*20
 
@@ -21,7 +20,7 @@ def home():
 
 		blockArray = blocksDB.find({'height' : {'$gte' : blockCount - 20}}).sort('height', DESCENDING)
 
-		return render_template('home.html', blocks=blockArray, pages=pages)
+		return render_template('home.html', blocks=blockArray, pages=pages, now=int(time()))
 	except:
 		return render_template('error.html')
 		
