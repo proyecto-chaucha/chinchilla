@@ -7,23 +7,10 @@ Puedes visitar [explorer.chaucha.cl](http://explorer.chaucha.cl) para ver en fun
 
 ## Instalación
 
-Este sistema fue programado para funcionar en Python 3.6 junto con las extensiones [Flask](http://flask.pocoo.org) y [python-bitcoinrpc](https://github.com/jgarzik/python-bitcoinrpc).
+Este sistema fue programado para funcionar en Python 3.6 junto con las extensiones [Flask](http://flask.pocoo.org), [Ukuku](https://github.com/proyecto-chaucha/ukuku) y [PyMongo](https://api.mongodb.com/python/current/).
+
+Si quieres ejecutar en un vps es necesario utilizar [Gunicorn](http://gunicorn.org) para redirigir el flujo web a la ip del servidor.
 
 ```
-sudo apt-get install pip3
-pip3 install flask python-bitcoinrpc gunicorn
-```
-
-Luego de esto, es necesario ejecutar la wallet en modo **-server -daemon -txindex** y se debe incluir la configuración para la comunicación RPC en el archivo *config.py* dentro de la carpeta chinchilla.
-
-Para finalizar, se ejecuta el código con python de la siguiente manera.
-
-```
-python3 __main__.py
-```
-
-Si se quiere ejecutar en un vps es necesario utilizar [Gunicorn](http://gunicorn.org) para redirigir el flujo web a la ip del servidor. Para mantener en funcionamiento el sistema es recomendable usar *nohup*.
-
-```
-nohup gunicorn -b 127.0.0.1:4000 chinchilla:app
+gunicorn -b <IP>:80 chinchilla:app --daemon
 ```
