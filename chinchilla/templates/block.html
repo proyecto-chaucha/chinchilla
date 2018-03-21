@@ -20,7 +20,8 @@
 	{% for i in tx %}
 		<tr>
 			<td class="has-text-centered is-hidden-touch">{{ (i['size']/1024)|round(2) }} Kb</td>
-			<td class="has-text-centered"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'] }}</a></td>
+			<td class="has-text-centered is-hidden-touch"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'] }}</a></td>
+			<td class="has-text-centered is-hidden-desktop"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'][:15] }}...</a></td>
 			<td class="has-text-centered is-hidden-touch">{{ i['inputs'] }}</td>
 			<td class="has-text-centered is-hidden-touch">{{ i['outputs'] }}</td>
 			<td class="has-text-centered">{{ i['amount'] }} CHA</td>

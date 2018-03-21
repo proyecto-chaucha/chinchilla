@@ -37,8 +37,8 @@
 	{% for i in blocks %}
 		<tr>
 			<td class="has-text-centered"><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
-			<td class="has-text-centered">{{ ((now - i['time'])/60)|int }} Min.</td>
-			<td class="has-text-centered">{{ i['difficulty']|round(4) }}</td>
+			<td class="has-text-centered">{{ ((now - i['time'])/60)|round(2) }} Min.</td>
+			<td class="has-text-centered">{{ i['difficulty']|round(2) }}</td>
 			<td class="has-text-centered is-hidden-touch">{{ i['hash'] }}</td>
 			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
 			<td class="has-text-centered">{{ i['tx']|length }}</td>
