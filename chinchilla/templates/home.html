@@ -5,7 +5,9 @@
 <h3 class="title is-size-4">Últimos bloques generados</h3>
 <p class="subtitle monospace mini">
 	{% if pages['current'] > 0 %}
-		<a href="{{ url_for('home',page=pages['current']) }}" class="has-text-danger"><i class="fa fa-lg fa-caret-left" aria-hidden="true"></i></a>
+		<a href="{{ url_for('home',page=pages['current']) }}" class="has-text-danger">
+			<i class="fa fa-lg fa-caret-left" aria-hidden="true"></i>
+		</a>
 	{% endif %}
 
 	Página {{ pages['current'] + 1 }} de {{ pages['max'] + 2 }}
@@ -20,34 +22,14 @@
 </p>
 </div>
 <br><br>
-<table class="table center is-hidden-desktop">
-	<thead>
-		<tr>
-			<th class="has-text-centered">#</th>
-			<th class="has-text-centered">Fecha</th>
-			<th class="has-text-centered">Tamaño</th>
-			<th class="has-text-centered">Tx</th>
-		</tr>
-	</thead>
-	<tbody class="monospace">
-	{% for i in blocks %}
-		<tr>
-			<td class="has-text-centered"><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
-			<td class="has-text-centered">{{ i['time'] }}</td>
-			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
-			<td class="has-text-centered">{{ i['tx']|length }}</td>
-		</tr>
-	{% endfor %}
-	</tbody>
-</table>
 
 <table class="table center is-hidden-touch">
 	<thead>
 		<tr>
 			<th class="has-text-centered">#</th>
 			<th class="has-text-centered">Fecha</th>
-			<th class="has-text-centered">Dificultad</th>
-			<th class="has-text-centered">Hash</th>
+			<th class="has-text-centered is-hidden-touch">Dificultad</th>
+			<th class="has-text-centered is-hidden-touch">Hash</th>
 			<th class="has-text-centered">Tamaño</th>
 			<th class="has-text-centered">Tx</th>
 		</tr>
@@ -57,8 +39,8 @@
 		<tr>
 			<td class="has-text-centered"><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
 			<td class="has-text-centered">{{ i['time'] }}</td>
-			<td class="has-text-centered">{{ i['difficulty']|round(8) }}</td>
-			<td class="has-text-centered">{{ i['hash'] }}</td>
+			<td class="has-text-centered is-hidden-touch">{{ i['difficulty']|round(8) }}</td>
+			<td class="has-text-centered is-hidden-touch">{{ i['hash'] }}</td>
 			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
 			<td class="has-text-centered">{{ i['tx']|length }}</td>
 		</tr>

@@ -1,5 +1,5 @@
 from chinchilla.config import RPCuser, RPCpassword, RPCport
-from pymongo import MongoClient, DESCENDING
+from pymongo import MongoClient
 from flask import Flask
 
 # MongoDB

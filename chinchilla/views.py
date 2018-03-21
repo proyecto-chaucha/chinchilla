@@ -1,6 +1,7 @@
 from flask import render_template, jsonify, redirect, url_for, request
 from time import strftime, localtime
 from chinchilla import app, blocksDB, txDB
+from pymongo import DESCENDING
 
 @app.route('/')
 def home():
@@ -16,18 +17,11 @@ def home():
 		maxPage = int((blockCount - 19)/20)
 		delta = blockCount - page*20
 
-		print(delta)
-
 		pages = {'current' : page, 'max' : maxPage}
 
-		for i in range(delta - 19, delta + 1):
-			if i > 0:
-				block = blocksDB.find_one({ 'height' : i })
-				block['time'] = strftime("%d %b %Y %H:%M:%S", localtime(block['time']))
-				blockArray.append(block)
+		blockArray = blocksDB.find({'height' : {'$gte' : blockCount - 20}}).sort('height', DESCENDING)
 
-		return render_template('home.html', blocks=blockArray[::-1], pages=pages)
-		
+		return render_template('home.html', blocks=blockArray, pages=pages)
 	except:
 		return render_template('error.html')
 		
