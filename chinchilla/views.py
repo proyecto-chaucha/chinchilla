@@ -7,18 +7,20 @@ from pymongo import DESCENDING
 def home():
 	try:
 		if request.args.get('page'):
-			page = int(request.args.get('page')) - 1
+			page = int(request.args.get('page'))
 		else:
-			page = 0
+			page = 1
+
 
 		blockCount = blocksDB.count()
 		
 		maxPage = int((blockCount - 19)/20)
 		delta = blockCount - page*20
+		print(delta)
 
-		pages = {'current' : page, 'max' : maxPage}
+		pages = {'current' : page, 'max' : maxPage + 2}
 
-		blockArray = blocksDB.find({'height' : {'$gte' : blockCount - 20}}).sort('height', DESCENDING)
+		blockArray = blocksDB.find({'height' : {'$gte' : delta, '$lt' : delta + 20}}).sort('height', DESCENDING).limit(20)
 
 		return render_template('home.html', blocks=blockArray, pages=pages, now=int(time()))
 	except:

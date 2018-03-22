@@ -4,16 +4,14 @@
 <div class="has-text-centered">
 <h3 class="title is-size-4">Últimos bloques generados</h3>
 <p class="subtitle monospace mini">
-	{% if pages['current'] > 0 %}
-		<a href="{{ url_for('home',page=pages['current']) }}" class="has-text-danger">
-			<i class="fa fa-lg fa-caret-left" aria-hidden="true"></i>
-		</a>
+	{% if pages['current'] > 1 %}
+		<a href="{{ url_for('home',page=pages['current'] - 1) }}" class="has-text-danger"><i class="fa fa-lg fa-caret-left" aria-hidden="true"></i></a>
 	{% endif %}
 
-	Página {{ pages['current'] + 1 }} de {{ pages['max'] + 2 }}
+	Página {{ pages['current'] }} de {{ pages['max'] }}
 
-	{% if pages['current'] - 1 < pages['max'] %}
-		<a href="{{ url_for('home',page=pages['current'] + 2) }}" class="has-text-danger">
+	{% if pages['current']  < pages['max'] %}
+		<a href="{{ url_for('home',page=pages['current'] + 1) }}" class="has-text-danger">
 			<i class="fa fa-lg fa-caret-right" aria-hidden="true"></i>
 		</a>
 	{% endif %}
