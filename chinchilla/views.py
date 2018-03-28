@@ -11,12 +11,10 @@ def home():
 		else:
 			page = 1
 
-
 		blockCount = blocksDB.count()
 		
 		maxPage = int((blockCount - 19)/20)
 		delta = blockCount - page*20
-		print(delta)
 
 		pages = {'current' : page, 'max' : maxPage + 2}
 
@@ -28,62 +26,66 @@ def home():
 		
 @app.route('/block/<string:hash>')
 def block(hash):
-	try:
-		blockInfo = blocksDB.find_one({ 'hash' : hash })
-		height = blockInfo['height']
+	blockInfo = blocksDB.find_one({ 'hash' : hash })
+	height = blockInfo['height']
 
-		txArray = []
+	txArray = []
+	tx_query = txDB.find({ 'hash' : {'$in' : blockInfo['tx'] } })
 
-		for i in blockInfo['tx']:
-			tx = txDB.find_one({ 'hash' : i })
+	for tx in tx_query:
+		amount = 0
+		for j in tx['vout']:
+			amount += float(j['value'])
 
-			amount = 0
-			for j in tx['vout']:
-				amount += float(j['value'])
+		txDict = {'hash' : tx['txid'],
+				'inputs' : len(tx['vin']),
+				'outputs' : len(tx['vout']), 
+				'amount' : '{0:.8f}'.format(amount),
+				'size' : tx['size']}
+		
+		txArray.append(txDict)
 
-			txDict = {'hash' : tx['txid'],
-					'inputs' : len(tx['vin']),
-					'outputs' : len(tx['vout']), 
-					'amount' : '{0:.8f}'.format(amount),
-					'size' : tx['size']}
-			
-			txArray.append(txDict)
+	return render_template('block.html', tx=txArray, height=height)
 
-		return render_template('block.html', tx=txArray, height=height)
-	except:
-		return render_template('error.html')
 
 @app.route('/tx/<string:txid>')
 def tx(txid):
-	try:
-		tx = txDB.find_one({ 'txid' : txid})
+	tx = txDB.find_one({ 'txid' : txid})
 
-		vin = []
-		vout = []
+	vin = []
+	vout = []
 
-		inputvalue = 0.0
-		outputvalue = 0.0
+	inputvalue = 0.0
+	outputvalue = 0.0
 
-		for j in tx['vout']:
-			if j['scriptPubKey']['type'] == 'pubkeyhash':
-				addresses = j['scriptPubKey']['addresses']
-				value = float(j['value'])
-				outputvalue += value
-				vout.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
+	for j in tx['vout']:
+		if j['scriptPubKey']['type'] == 'pubkeyhash':
+			addresses = j['scriptPubKey']['addresses'][0]
+			value = float(j['value'])
+			outputvalue += value
+			vout.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
 
-		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
-			vin.append({'value' : 'Generación de Chauchas', 'addresses' : ['Generación de Chauchas']})
+	if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
+		vin.append({'value' : 'Generación de Chauchas', 'addresses' : 'Generación de Chauchas'})
 
-		else:
-			for i in tx['vin']:
-				tx = txDB.find_one({ 'txid' : i['txid'] })
-				n = i['vout']
+	else:
+		addr = []
 
-				addresses = tx['vout'][n]['scriptPubKey']['addresses']
-				value = float(tx['vout'][n]['value'])
-				inputvalue += value
-				vin.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
+		txid_array = [i['txid'] for i in tx['vin']]
+		txvin = [{'n' : i['vout'], 'txid' : i['txid'] } for i in tx['vin']]
+		query = txDB.find({ 'txid' : {'$in' : txid_array }})
 
-		return render_template('tx.html', vout=vout, vin=vin, txid=txid, fee=inputvalue - outputvalue)
-	except:
-		return render_template('error.html')
+		for i in query:
+
+			for j in txvin:
+				if i['txid'] == j['txid']:
+					n = j['n']
+
+			addresses = i['vout'][n]['scriptPubKey']['addresses'][0]
+			value = float(i['vout'][n]['value'])
+
+			vin.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses, 'txid' : i['txid']})
+
+			inputvalue += value
+
+	return render_template('tx.html', vout=vout, vin=vin, txid=txid, fee=(inputvalue - outputvalue))

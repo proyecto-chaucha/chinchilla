@@ -13,6 +13,7 @@
 		<table class="table is-fullwidth">
 			<thead>
 				<tr>
+					<th class="has-text-centered">Origen</th>
 					<th class="has-text-centered">Dirección</th>
 					<th class="has-text-centered">Monto</th>
 				</tr>
@@ -20,21 +21,14 @@
 			<tbody class="monospace">
 			{% for i in vin %}
 				<tr>
-					{% if i['addresses'][0] == i['value'] %}
-					<td class="has-text-centered" colspan="2">{{ i['value'] }}</td>
+					{% if i['addresses'] == i['value'] %}
+					<td class="has-text-centered" colspan="3">{{ i['value'] }}</td>
 					{% else %}
-
-					<td class="has-text-centered is-hidden-touch">
-						{% for j in i['addresses'] %}
-						{{ j }}<br>
-						{% endfor %}
+					<td class="has-text-centered">
+						<a class="has-text-danger"  href="{{ url_for('tx', txid=i['txid'])}}">Ver transacción</a>
 					</td>
-					<td class="has-text-centered is-hidden-desktop">
-						{% for j in i['addresses'] %}
-						{{ j[:17] }}<br>
-						{{ j[17:] }}<br>
-						{% endfor %}
-					</td>
+					<td class="has-text-centered is-hidden-touch">{{i['addresses']}}</td>
+					<td class="has-text-centered is-hidden-desktop">{{ i['addresses'][:17] }}<br>{{ i['addresses'][17:] }}</td>
 					<td class="has-text-centered">{{ i['value'] }}</td>
 					{% endif %}
 				</tr>
@@ -56,17 +50,8 @@
 			<tbody class="monospace">
 			{% for i in vout %}
 				<tr>
-					<td class="has-text-centered is-hidden-touch">
-						{% for j in i['addresses'] %}
-						{{ j }}<br>
-						{% endfor %}
-					</td>
-					<td class="has-text-centered is-hidden-desktop">
-						{% for j in i['addresses'] %}
-						{{ j[:17] }}<br>
-						{{ j[17:] }}<br>
-						{% endfor %}
-					</td>
+					<td class="has-text-centered is-hidden-touch">{{i['addresses']}}</td>
+					<td class="has-text-centered is-hidden-desktop">{{ i['addresses'][:17] }}<br>{{ i['addresses'][17:] }}</td>
 					<td class="has-text-centered">{{ i['value'] }}</td>
 				</tr>
 			{% endfor %}
