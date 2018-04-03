@@ -3,15 +3,12 @@
 
 <div class="content has-text-centered">
 	<h1>¿Qué es esto?</h1>
-	<p>Aquí se encuentran todas las transacciones que incluye el bloque que seleccionaste.</p>
+	<p>Aquí se encuentran todas las transacciones que incluye el bloque <u>#{{ height }}</u>.</p>
 	<p>Hay ocasiones en donde no se realizaron transacciones en el periodo de generación del bloque, que por lo general es un plazo de 1 minuto. Cuando esto sucede se genera un "bloque vacío", que solo incluye la <u>transacción de generación de Chauchas</u> correspondiente al bloque.</p>
 	<p>En la actualidad, con cada bloque se generan <u>1.5 Chauchas</u> nuevas en la red, que se les entregan al usuario que minó el bloque.</p>
 </div>
 
-<br>
-
 <div class="has-text-centered">
-<h3 class="title is-size-4">Transacciones del bloque #{{ height }}</h3>
 <p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
 </div>
 <br>

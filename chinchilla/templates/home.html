@@ -3,14 +3,11 @@
 
 <div class="content has-text-centered">
 	<h1>¿Qué es esto?</h1>
-	<p>El proyecto <a href="https://github.com/proyecto-chaucha/chinchilla" class="has-text-danger" target="_blank">Chinchilla</a> es una plataforma que permite observar la información que incluye el blockchain de <a href="https://www.chaucha.cl" target="_blank" class="has-text-danger">Chaucha</a>, para que los usuarios descubran de una manera práctica cómo se van generando los bloques en el tiempo, y que transacciones contiene cada bloque.</p>
-	<p>En la siguiente lista se encuentran los últimos 20 bloques generados por la Red Chaucha.</p>
+	<p>El proyecto <a href="https://github.com/proyecto-chaucha/chinchilla" class="has-text-danger" target="_blank">Chinchilla</a> es una plataforma que permite observar la información que incluye el blockchain de <a href="https://www.chaucha.cl" target="_blank" class="has-text-danger">Chaucha</a>, para que los usuarios descubran de una <u>manera práctica</u> cómo se van generando los bloques en el tiempo, y que transacciones contiene cada bloque.</p>
+	<p>En la siguiente lista se encuentran los <u>últimos 20 bloques</u> generados por la Red Chaucha.</p>
 </div>
 
-<br>
-
 <div class="has-text-centered">
-<h3 class="title is-size-4">Últimos bloques generados</h3>
 <p class="subtitle monospace mini">
 	{% if pages['current'] > 1 %}
 		<a href="{{ url_for('home',page=pages['current'] - 1) }}" class="has-text-danger"><i class="fa fa-lg fa-caret-left" aria-hidden="true"></i></a>
