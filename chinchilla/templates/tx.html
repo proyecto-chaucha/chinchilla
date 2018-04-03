@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
 
+<div class="content has-text-centered">
+	<h1>¿Qué es esto?</h1>
+	<p>Esto es una transacción en la Red Chaucha.</p>
+	<p>Cada transacción contiene un conjunto de <u>entradas</u>, que son transacciones antiguas controla el usuario que generó la transacción, y <u>salidas</u>, que son direcciones receptoras del monto a transferir</p>
+	<p>La resta entre el monto de entrada y el monto de salida es un <u>impuesto</u>, que se utiliza como un incentivo para que los mineros procesen tu transacción y la incluyan en un bloque.</p>
+</div>
+
+
 <div class="has-text-centered">
 <h3 class="title is-size-4 is-hidden-touch">{{ txid }}</h3>
 <h3 class="title is-size-4 is-hidden-desktop">{{ txid[:15] }}...</h3>
