@@ -4,40 +4,38 @@
 <table class="table center">
 	<thead>
 		<tr>
-			<th class="has-text-centered">#</th>
-			<th class="has-text-centered">Fecha</th>
-			<th class="has-text-centered">Dificultad</th>
+			<th>#</th>
+			<th>Fecha</th>
+			<th>Dificultad</th>
 			<th class="has-text-centered is-hidden-touch">Hash</th>
-			<th class="has-text-centered">Tamaño</th>
-			<th class="has-text-centered">Tx</th>
+			<th>Tamaño</th>
+			<th>Tx</th>
 		</tr>
 	</thead>
 	<tbody class="monospace">
 	{% for i in blocks %}
 		<tr>
-			<td class="has-text-centered"><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
-			<td class="has-text-centered">{{ i['time'] }}</td>
-			<td class="has-text-centered">{{ i['difficulty']|round(6) }}</td>
+			<td><a class="has-text-danger" href="/block/{{ i['hash'] }}">{{ i['height'] }}</a></td>
+			<td>{{ i['time'] }}</td>
+			<td>{{ i['difficulty']|round(6) }}</td>
 			<td class="has-text-centered is-hidden-touch">{{ i['hash'] }}</td>
-			<td class="has-text-centered">{{ (i['size']/1024)|round(2) }} Kb</td>
-			<td class="has-text-centered">{{ i['tx']|length }}</td>
+			<td>{{ (i['size']/1024)|round(2) }} Kb</td>
+			<td>{{ i['tx']|length }}</td>
 		</tr>
 	{% endfor %}
 	</tbody>
 </table>
 
-<div class="has-text-centered">
-<p class="subtitle monospace mini">
+<div>
+<p class="subtitle monospace mini has-text-centered">
 	{% if pages['current'] > 1 %}
-		<a href="{{ url_for('home',page=pages['current'] - 1) }}" class="has-text-danger"><i class="fa fa-lg fa-caret-left" aria-hidden="true"></i></a>
+		<a href="{{ url_for('home',page=pages['current'] - 1) }}" class="has-text-danger"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
 	{% endif %}
 
 	Página {{ pages['current'] }} de {{ pages['max'] }}
 
 	{% if pages['current']  < pages['max'] %}
-		<a href="{{ url_for('home',page=pages['current'] + 1) }}" class="has-text-danger">
-			<i class="fa fa-lg fa-caret-right" aria-hidden="true"></i>
-		</a>
+		<a href="{{ url_for('home',page=pages['current'] + 1) }}" class="has-text-danger"><i class="fas fa-arrow-right" aria-hidden="true"></i></a>
 	{% endif %}
 </p>
 </div>

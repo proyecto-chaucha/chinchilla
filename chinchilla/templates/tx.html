@@ -3,8 +3,8 @@
 
 {% if fee >= 0 %}
 <div class="has-text-centered">
-	<h1 class="title is-size-4">Impuesto por transacción</h1>
-	<p class="subtitle is-size-5 monospace has-text-centered">{{fee|round(8)}} CHA</p>
+	<h1 class="title is-size-5">Impuesto por transacción</h1>
+	<p class="subtitle is-size-5 monospace">{{fee|round(8)}} CHA</p>
 </div>
 {% endif %}
 
@@ -12,28 +12,23 @@
 <div class="columns">
 	<div class="column has-text-centered">
 		<h1 class="title is-size-4">Entradas</h1>
-		{% if vin[0]['addresses'] == vin[0]['value'] %}
+		{% if vin[0]['utxo'] == vin[0]['vout'] %}
 			<br>
-			<p class="is-size-5">{{ vin[0]['value'] }}</p>
+			<h1 class="is-size-6">{{ vin[0]['vout'] }}</h1>
 			<br>
 		{% else %}
 		<table class="table is-fullwidth">
 			<thead>
 				<tr>
-					<th class="has-text-centered">Origen</th>
-					<th class="has-text-centered">Dirección</th>
-					<th class="has-text-centered">Monto</th>
+					<th>Posición</th>
+					<th>Transacción de entrada</th>
 				</tr>
 			</thead>
 			<tbody class="monospace">
 			{% for i in vin %}
 				<tr>
-					<td class="has-text-centered">
-						<a class="has-text-danger"  href="{{ url_for('tx', txid=i['txid'])}}">Ver transacción</a>
-					</td>
-					<td class="has-text-centered is-hidden-touch">{{i['addresses']}}</td>
-					<td class="has-text-centered is-hidden-desktop">{{ i['addresses'][:17] }}<br>{{ i['addresses'][17:] }}</td>
-					<td class="has-text-centered">{{ i['value'] }}</td>
+					<td>{{ i['vout'] }}</td>
+					<td><a class="has-text-danger" href="{{ url_for('tx', txid=i['utxo'])}}">{{ i['utxo'] }}</a></td>
 				</tr>
 			{% endfor %}
 			</tbody>
@@ -46,17 +41,20 @@
 		<table class="table is-fullwidth">
 			<thead>
 				<tr>
-					<th class="has-text-centered">Dirección</th>
-					<th class="has-text-centered">Monto</th>
+					<th>Posición</th>
+					<th>Dirección</th>
+					<th>Monto</th>
+					<th>Tipo</th>
 
 				</tr>
 			</thead>
 			<tbody class="monospace">
 			{% for i in vout %}
 				<tr>
-					<td class="has-text-centered is-hidden-touch">{{i['addresses']}}</td>
-					<td class="has-text-centered is-hidden-desktop">{{ i['addresses'][:17] }}<br>{{ i['addresses'][17:] }}</td>
-					<td class="has-text-centered">{{ i['value'] }}</td>
+					<td>{{ i['n'] }}</td>
+					<td class="is-hidden-touch">{{i['addresses']}}</td>
+					<td>{{ i['value'] }}</td>
+					<td>{{ i['scriptType'] }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>

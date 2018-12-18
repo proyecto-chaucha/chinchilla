@@ -35,6 +35,7 @@ def home():
 @app.route('/block/<string:hash>')
 def block(hash):
 	blockInfo = get('http://localhost:21662/rest/block/' + hash + '.json').json()
+	blockInfo['time'] = strftime('%d.%m.%Y %H:%M:%S', localtime(int(blockInfo['time'])))
 	txs = blockInfo['tx']
 
 	txArray = []
@@ -52,7 +53,7 @@ def block(hash):
 		
 		txArray.append(txDict)
 
-	return render_template('block.html', tx=txArray, height=blockInfo['height'])
+	return render_template('block.html', tx=txArray, block=blockInfo)
 
 
 @app.route('/tx/<string:txid>')
@@ -67,33 +68,54 @@ def tx(txid):
 		outputvalue = 0.0
 
 		for j in tx['vout']:
-			if j['scriptPubKey']['type'] == 'pubkeyhash' or j['scriptPubKey']['type'] == 'pubkey':
+				if j['scriptPubKey']['type'] == 'nulldata':
+					addresses = ''
+				else:
+					addresses = j['scriptPubKey']['addresses'][0]
 
-				addresses = j['scriptPubKey']['addresses'][0]
 				value = float(j['value'])
-				vout.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
+				script = j['scriptPubKey']['asm']
+				n = j['n']
+
+				if j['scriptPubKey']['type'] == 'pubkeyhash':
+					scriptType = 'P2PKH'
+				elif j['scriptPubKey']['type'] == 'pubkey':
+					scriptType = 'P2PK'
+				elif j['scriptPubKey']['type'] == 'scripthash':
+					scriptType = 'P2SH'
+				else:
+					scriptType = 'Nonstandard'
+
+				txout = {
+						'value' : '{0:.8f}'.format(value),
+						'addresses' : addresses,
+						'scriptType' : scriptType,
+						'script' : script,
+						'n' : n
+						}
+
+				vout.append(txout)
 				outputvalue += value
 
 		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
-			vin.append({'value' : 'Generación de Chauchas', 'addresses' : 'Generación de Chauchas'})
+			vin.append({'utxo' : 'Generación de Chauchas', 'vout' : 'Generación de Chauchas'})
 		else:
 			addr = []
 
 			txid_array = [i['txid'] for i in tx['vin']]
-			txvin = [{'n' : i['vout'], 'txid' : i['txid'] } for i in tx['vin']]
+			vin = [{'vout' : i['vout'], 'utxo' : i['txid'] } for i in tx['vin']]
 
 			for i in txid_array:
 				utxo = get('http://localhost:21662/rest/tx/' + i + '.json').json()
 
-				for j in txvin:
-					if utxo['txid'] == j['txid']:
-						n = j['n']
+				for j in vin:
+					if utxo['txid'] == j['utxo']:
+						n = j['vout']
 
-				addresses = utxo['vout'][n]['scriptPubKey']['addresses'][0]
+
 				value = float(utxo['vout'][n]['value'])
-				vin.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses, 'txid' : utxo['txid']})
-
 				inputvalue += value
+
 		return render_template('tx.html', vout=vout, vin=vin, txid=txid, fee=(inputvalue - outputvalue))
 	else:
 		return redirect(url_for('home'))

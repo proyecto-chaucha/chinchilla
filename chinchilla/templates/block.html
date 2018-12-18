@@ -2,30 +2,59 @@
 {% block body %}
 
 <table class="table center">
-	<thead>
-		<tr>
-			<th class="has-text-centered is-hidden-touch">Tamaño</th>
-			<th class="has-text-centered">Hash</th>
-			<th class="has-text-centered is-hidden-touch">Entradas</th>
-			<th class="has-text-centered is-hidden-touch">Salidas</th>
-			<th class="has-text-centered">Monto</th>
-		</tr>
-	</thead>
 	<tbody class="monospace">
-	{% for i in tx %}
 		<tr>
-			<td class="has-text-centered is-hidden-touch">{{ (i['size']/1024)|round(2) }} Kb</td>
-			<td class="has-text-centered is-hidden-touch"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'] }}</a></td>
-			<td class="has-text-centered is-hidden-desktop"><a class="has-text-danger" href="/tx/{{ i['hash'] }}">{{ i['hash'][:15] }}...</a></td>
-			<td class="has-text-centered is-hidden-touch">{{ i['inputs'] }}</td>
-			<td class="has-text-centered is-hidden-touch">{{ i['outputs'] }}</td>
-			<td class="has-text-centered">{{ i['amount'] }} CHA</td>
+			<th>Altura</th>
+			<td>{{ block['height'] }}</td>
 		</tr>
-	{% endfor %}
+		<tr>
+			<th>Fecha de creación</th>
+			<td>{{ block['time'] }}</td>
+		</tr>
+		<tr>
+			<th>Tamaño</th>
+			<td>{{ (block['size']/1024)|round(2) }} Kb</td>
+		</tr>
+		<tr>
+			<th>Hash</th>
+			<td>{{ block['hash'] }}</td>
+		</tr>
+		<tr>
+			<th>Dificultad</th>
+			<td>{{ block['difficulty'] }}</td>
+		</tr>
+		<tr>
+			<th>Versión de bloque</th>
+			<td>{{ block['versionHex'] }}</td>
+		</tr>
+		<tr>
+			<th>Hash del bloque anterior</th>
+			<td>{{ block['previousblockhash'] }}</td>
+		</tr>
+		<tr>
+			<th>Raiz de Merkle</th>
+			<td>{{ block['merkleroot'] }}</td>
+		</tr>
+		<tr>
+			<th>Bits</th>
+			<td>{{ block['bits'] }}</td>
+		</tr>
+		<tr>
+			<th>Nonce</th>
+			<td>{{ block['nonce'] }}</td>
+		</tr>
+		<tr>
+			<th>Transacciones</th>
+			<td>
+			{% for i in tx %}
+			<a class="has-text-danger" href="{{ url_for('tx', txid=i['hash']) }}">{{i['hash']}}</a><br>
+			{% endfor %}
+			</td>
+		</tr>
 	</tbody>
 </table>
 
-<div class="has-text-centered">
-<p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
+<div>
+<p class="has-text-centered subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
 </div>
 {% endblock %}
