@@ -6,10 +6,17 @@
 	<h1 class="title is-size-4">Impuesto por transacción</h1>
 	<p class="subtitle is-size-5 monospace has-text-centered">{{fee|round(8)}} CHA</p>
 </div>
+{% endif %}
+
 <br>
 <div class="columns">
 	<div class="column has-text-centered">
 		<h1 class="title is-size-4">Entradas</h1>
+		{% if vin[0]['addresses'] == vin[0]['value'] %}
+			<br>
+			<p class="is-size-5">{{ vin[0]['value'] }}</p>
+			<br>
+		{% else %}
 		<table class="table is-fullwidth">
 			<thead>
 				<tr>
@@ -21,20 +28,17 @@
 			<tbody class="monospace">
 			{% for i in vin %}
 				<tr>
-					{% if i['addresses'] == i['value'] %}
-					<td class="has-text-centered" colspan="3">{{ i['value'] }}</td>
-					{% else %}
 					<td class="has-text-centered">
 						<a class="has-text-danger"  href="{{ url_for('tx', txid=i['txid'])}}">Ver transacción</a>
 					</td>
 					<td class="has-text-centered is-hidden-touch">{{i['addresses']}}</td>
 					<td class="has-text-centered is-hidden-desktop">{{ i['addresses'][:17] }}<br>{{ i['addresses'][17:] }}</td>
 					<td class="has-text-centered">{{ i['value'] }}</td>
-					{% endif %}
 				</tr>
 			{% endfor %}
 			</tbody>
 		</table>
+		{% endif %}
 	</div>
 
 	<div class="column has-text-centered">
@@ -60,7 +64,6 @@
 	</div>
 </div>
 
-{% endif %}
 <div class="has-text-centered">
 <p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
 </div>

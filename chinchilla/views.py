@@ -57,43 +57,43 @@ def block(hash):
 
 @app.route('/tx/<string:txid>')
 def tx(txid):
-	tx = get('http://localhost:21662/rest/tx/' + txid + '.json').json()
+	if not txid == app.config['genesis_tx']:
+		tx = get('http://localhost:21662/rest/tx/' + txid + '.json').json()
 
-	vin = []
-	vout = []
+		vin = []
+		vout = []
 
-	inputvalue = 0.0
-	outputvalue = 0.0
+		inputvalue = 0.0
+		outputvalue = 0.0
 
-	for j in tx['vout']:
-		if j['scriptPubKey']['type'] == 'pubkeyhash' or j['scriptPubKey']['type'] == 'pubkey':
+		for j in tx['vout']:
+			if j['scriptPubKey']['type'] == 'pubkeyhash' or j['scriptPubKey']['type'] == 'pubkey':
 
-			addresses = j['scriptPubKey']['addresses'][0]
-			value = float(j['value'])
-			vout.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
-			
-			outputvalue += value
+				addresses = j['scriptPubKey']['addresses'][0]
+				value = float(j['value'])
+				vout.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses})
+				outputvalue += value
 
-	if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
-		vin.append({'value' : 'Generación de Chauchas', 'addresses' : 'Generación de Chauchas'})
+		if len(tx['vin']) == 1 and not 'vout' in tx['vin'][0]:
+			vin.append({'value' : 'Generación de Chauchas', 'addresses' : 'Generación de Chauchas'})
+		else:
+			addr = []
 
+			txid_array = [i['txid'] for i in tx['vin']]
+			txvin = [{'n' : i['vout'], 'txid' : i['txid'] } for i in tx['vin']]
+
+			for i in txid_array:
+				utxo = get('http://localhost:21662/rest/tx/' + i + '.json').json()
+
+				for j in txvin:
+					if utxo['txid'] == j['txid']:
+						n = j['n']
+
+				addresses = utxo['vout'][n]['scriptPubKey']['addresses'][0]
+				value = float(utxo['vout'][n]['value'])
+				vin.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses, 'txid' : utxo['txid']})
+
+				inputvalue += value
+		return render_template('tx.html', vout=vout, vin=vin, txid=txid, fee=(inputvalue - outputvalue))
 	else:
-		addr = []
-
-		txid_array = [i['txid'] for i in tx['vin']]
-		txvin = [{'n' : i['vout'], 'txid' : i['txid'] } for i in tx['vin']]
-
-		for i in txid_array:
-			utxo = get('http://localhost:21662/rest/tx/' + i + '.json').json()
-
-			for j in txvin:
-				if utxo['txid'] == j['txid']:
-					n = j['n']
-
-			addresses = utxo['vout'][n]['scriptPubKey']['addresses'][0]
-			value = float(utxo['vout'][n]['value'])
-			vin.append({'value' : '{0:.8f}'.format(value), 'addresses' : addresses, 'txid' : utxo['txid']})
-
-			inputvalue += value
-
-	return render_template('tx.html', vout=vout, vin=vin, txid=txid, fee=(inputvalue - outputvalue))
+		return redirect(url_for('home'))
