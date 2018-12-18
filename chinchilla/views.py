@@ -2,10 +2,10 @@ from flask import render_template, redirect, url_for, request
 from chinchilla import app
 from time import time
 from requests import get
+from time import strftime, localtime
 
 @app.route('/')
 def home():
-
 	if request.args.get('page'):
 		page = int(request.args.get('page'))
 	else:
@@ -23,13 +23,14 @@ def home():
 		if i >= 0:
 			blockhash = get('http://localhost:21662/rest/getblockhash/' + str(i) + '.json').json()
 			block = get('http://localhost:21662/rest/block/' + blockhash + '.json').json()
+			block['time'] = strftime('%d.%m.%Y %H:%M:%S', localtime(int(block['time'])))
 			blockArray.append(block)
 		else:
 			break
 
 	pages = {'current' : page, 'max' : maxPage + 2}
 
-	return render_template('home.html', blocks=blockArray, pages=pages, now=time())
+	return render_template('home.html', blocks=blockArray, pages=pages)
 
 @app.route('/block/<string:hash>')
 def block(hash):

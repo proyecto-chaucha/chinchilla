@@ -1,17 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
 
-<div class="content has-text-centered">
-	<h1>¿Qué es esto?</h1>
-	<p>Aquí se encuentran todas las transacciones que incluye el bloque <u>#{{ height }}</u>.</p>
-	<p>Hay ocasiones en donde no se realizaron transacciones en el periodo de generación del bloque, que por lo general es un plazo de 1 minuto. Cuando esto sucede se genera un "bloque vacío", que solo incluye la <u>transacción de generación de Chauchas</u> correspondiente al bloque.</p>
-	<p>En la actualidad, con cada bloque se generan <u>1.5 Chauchas</u> nuevas en la red, que obtiene el usuario que minó el bloque.</p>
-</div>
-
-<div class="has-text-centered">
-<p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
-</div>
-<br>
 <table class="table center">
 	<thead>
 		<tr>
@@ -36,4 +25,7 @@
 	</tbody>
 </table>
 
+<div class="has-text-centered">
+<p class="subtitle monospace mini"><a class="has-text-danger" href="{{ url_for('home') }}">Volver al inicio</a></p>
+</div>
 {% endblock %}
