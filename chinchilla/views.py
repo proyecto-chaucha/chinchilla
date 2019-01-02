@@ -21,7 +21,7 @@ def home():
 
 	for i in reversed(range(delta + 1, delta + 20 + 1)):
 		if i >= 0:
-			blockhash = get('http://localhost:21662/rest/getblockhash/' + str(i) + '.json').json()
+			blockhash = get('http://localhost:21662/rest/getblockhash/' + str(i) + '.json').text
 			block = get('http://localhost:21662/rest/block/' + blockhash + '.json').json()
 			block['time'] = strftime('%d.%m.%Y %H:%M:%S', localtime(int(block['time'])))
 			blockArray.append(block)
