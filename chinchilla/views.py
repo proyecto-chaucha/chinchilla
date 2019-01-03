@@ -12,7 +12,7 @@ def home():
 		page = 1
 
 	getinfo = get('http://localhost:21662/rest/chaininfo.json').json()
-	blockCount = getinfo['blocks']
+	blockCount = getinfo['height']
 
 	maxPage = int((blockCount - 19)/20)
 	delta = blockCount - page*20
